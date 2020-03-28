@@ -19,6 +19,9 @@ configurations {
 }
 
 repositories {
+    maven {
+        url = uri("https://jitpack.io")
+    }
     mavenCentral()
 }
 
@@ -31,6 +34,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
+    implementation("com.github.jkcclemens:khttp:0.1.0")
+    implementation("com.github.User:Repo:Tag")
     runtimeOnly("com.h2database:h2")
     runtimeOnly("org.postgresql:postgresql")
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
