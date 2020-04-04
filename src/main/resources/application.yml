@@ -1,0 +1,5 @@
+fs-web-client:
+  default-headers:
+    "User-Agent": "FlyStalker/${version}"
+    "Accept": "*/*"
+    "Accept-Encoding": "gzip"
