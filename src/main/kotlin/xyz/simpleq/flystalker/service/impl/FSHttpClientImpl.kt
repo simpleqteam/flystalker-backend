@@ -30,7 +30,6 @@ class FSHttpClientImpl(
                     .build()
             }
             .headers { headers ->
-
                 requestSpec.headers.forEach { headers[it.key] = it.value }
             }
             .exchange()
