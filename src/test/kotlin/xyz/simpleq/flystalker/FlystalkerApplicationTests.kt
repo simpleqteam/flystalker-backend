@@ -2,7 +2,6 @@ package xyz.simpleq.flystalker
 
 import org.junit.jupiter.api.Test
 import org.springframework.boot.test.context.SpringBootTest
-import khttp.responses.Response
 import reactor.core.publisher.Mono
 //TODO(не импортируется, нада чтобы импортировалось)
 //import xyz.simpleq.flystalker.service
