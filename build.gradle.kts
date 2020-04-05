@@ -31,14 +31,17 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.jetbrains.kotlin:kotlin-stdlib-jdk8")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-reactor")
-    runtimeOnly("com.h2database:h2")
-    runtimeOnly("org.postgresql:postgresql")
+
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+
+    // test
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
     }
     testImplementation("io.projectreactor:reactor-test")
-    testImplementation("org.springframework.security:spring-security-test")
+    testImplementation("com.squareup.okhttp3:okhttp:4.4.1")
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.4.1")
+    testImplementation("io.mockk:mockk:1.9")
 }
 
 tasks.withType<Test> {
@@ -50,4 +53,8 @@ tasks.withType<KotlinCompile> {
         freeCompilerArgs = listOf("-Xjsr305=strict")
         jvmTarget = "1.8"
     }
+}
+
+tasks.processResources {
+    expand(project.properties)
 }

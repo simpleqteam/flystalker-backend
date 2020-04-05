@@ -9,5 +9,4 @@ class FlystalkerApplicationTests {
     @Test
     fun contextLoads() {
     }
-
 }
