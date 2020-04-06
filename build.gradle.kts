@@ -34,6 +34,9 @@ dependencies {
 
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 
+    // db driver
+    runtimeOnly("org.postgresql:postgresql")
+
     // test
     testImplementation("org.springframework.boot:spring-boot-starter-test") {
         exclude(group = "org.junit.vintage", module = "junit-vintage-engine")
@@ -42,6 +45,9 @@ dependencies {
     testImplementation("com.squareup.okhttp3:okhttp:4.4.1")
     testImplementation("com.squareup.okhttp3:mockwebserver:4.4.1")
     testImplementation("io.mockk:mockk:1.9")
+
+    // test db driver
+    testRuntimeOnly("com.h2database:h2")
 }
 
 tasks.withType<Test> {
@@ -56,5 +62,9 @@ tasks.withType<KotlinCompile> {
 }
 
 tasks.processResources {
-    expand(project.properties)
+    filter { originalLine ->
+        originalLine.replace("\\$\\{projectProperties\\.(?<propName>.*)\\}".toRegex()) {
+            it.groups["propName"]?.value.let { key -> project.properties[key].toString() }
+        }
+    }
 }
