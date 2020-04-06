@@ -1,5 +1,15 @@
 fs-web-client:
   default-headers:
-    "User-Agent": "FlyStalker/${version}"
+    "User-Agent": "FlyStalker/${projectProperties.version}"
     "Accept": "*/*"
     "Accept-Encoding": "gzip"
+
+spring:
+  profiles:
+    active: ${FLSTK_ENV:preprod,dev}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
