@@ -6,26 +6,23 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.web.servlet.MockMvc
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
-@SpringBootTest(classes = [RequestsController::class])
+@SpringBootTest
 @AutoConfigureMockMvc
 class RequestControllerTests {
     @Autowired
     lateinit var mockMvc: MockMvc
 
     @Test
-    fun `get requests`() {
+    fun `get exchanges`() {
         mockMvc
-            .perform(get("/requests"))
+            .perform(get("/exchanges"))
             .andExpect(status().isOk)
     }
 
     @Test
-    fun `create request`() {
-        mockMvc
-            .perform(post("/requests"))
-            .andExpect(status().isOk)
+    fun `create exchange`() {
+        // TODO
     }
 }

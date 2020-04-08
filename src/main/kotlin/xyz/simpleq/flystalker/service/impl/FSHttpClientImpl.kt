@@ -5,18 +5,21 @@ import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
 import xyz.simpleq.flystalker.service.FSHttpClient
-import xyz.simpleq.flystalker.service.FSRequestSpec
+import xyz.simpleq.flystalker.model.FSExchange
+import xyz.simpleq.flystalker.model.RequestSpec
 import java.net.URI
+import java.time.Duration
+import java.time.OffsetDateTime
 
 @Service
 class FSHttpClientImpl(
     private val fsWebClient: WebClient
 ) : FSHttpClient {
-    override fun sendHttpRequest(requestSpec: FSRequestSpec): Mono<ClientResponse> =
+    override fun sendHttpRequest(requestSpec: RequestSpec): Mono<ClientResponse> =
         fsWebClient
             .method(requestSpec.method)
             .uri { uriBuilder ->
-                val uri = URI(requestSpec.uri)
+                val uri = URI(requestSpec.hostAndPath)
                 uriBuilder
                     .scheme(uri.scheme)
                     .fragment(uri.fragment)
@@ -33,5 +36,5 @@ class FSHttpClientImpl(
                 requestSpec.headers.forEach { headers[it.key] = it.value }
             }
             .exchange()
-            .delaySubscription(requestSpec.delayFor)
+            .delaySubscription(Duration.between(OffsetDateTime.now(), requestSpec.sendAfterDateTime))
 }

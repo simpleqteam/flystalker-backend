@@ -14,12 +14,14 @@ import xyz.simpleq.flystalker.MockWebServerConfiguration
 import xyz.simpleq.flystalker.MockWebServerProperties
 import xyz.simpleq.flystalker.configuration.FSWebClientConfiguration
 import xyz.simpleq.flystalker.configuration.FSWebClientProperties
+import xyz.simpleq.flystalker.model.RequestSpec
 import xyz.simpleq.flystalker.service.impl.FSHttpClientImpl
 import xyz.simpleq.flystalker.takeRequestOrFail
 import java.time.Duration
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.time.temporal.ChronoUnit
-import java.time.temporal.TemporalUnit
-import java.util.concurrent.TimeUnit
+import java.util.*
 
 @SpringBootTest(
     classes = [
@@ -56,11 +58,14 @@ class FSHttpClientImplTests {
 
 
         val responseMono = fsHttpClient
-            .sendHttpRequest(FSRequestSpec(
+            .sendHttpRequest(RequestSpec(
+                uuid = UUID.randomUUID(),
+                creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                 method = HttpMethod.GET,
-                uri = requestUriString,
+                hostAndPath = requestUriString,
                 headers = requestHeaders,
-                queryParams = requestQueryParams
+                queryParams = requestQueryParams,
+                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC)
             ))
 
         StepVerifier
@@ -87,9 +92,14 @@ class FSHttpClientImplTests {
     @Test
     fun `adds correct extra request headers`() {
         val responseMono = fsHttpClient
-            .sendHttpRequest(FSRequestSpec(
+            .sendHttpRequest(RequestSpec(
+                uuid = UUID.randomUUID(),
+                creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                 method = HttpMethod.GET,
-                uri = mockWebServerProperties.url
+                hostAndPath = mockWebServerProperties.url,
+                headers = emptyMap(),
+                queryParams = emptyMap(),
+                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC)
             ))
 
         StepVerifier
@@ -120,10 +130,14 @@ class FSHttpClientImplTests {
         StepVerifier
             .withVirtualTime {
                 fsHttpClient
-                    .sendHttpRequest(FSRequestSpec(
+                    .sendHttpRequest(RequestSpec(
+                        uuid = UUID.randomUUID(),
+                        creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                         method = HttpMethod.GET,
-                        uri = mockWebServerProperties.url,
-                        delayFor = delayDuration
+                        hostAndPath = mockWebServerProperties.url,
+                        headers = emptyMap(),
+                        queryParams = emptyMap(),
+                        sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC).plusNanos(delayDuration.toNanos())
                     ))
             }
             .expectSubscription()
