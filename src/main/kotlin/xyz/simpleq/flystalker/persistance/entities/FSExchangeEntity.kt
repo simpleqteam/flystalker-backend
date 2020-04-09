@@ -25,9 +25,19 @@ data class FSExchangeEntity(
 
     val hostAndPath: String,
 
+    val responseBody: String,
+
+    val requestBody: String,
+
+    val responseStatusCode: Int,
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val headers: JsonNode,
+    val responseHeaders: JsonNode,
+
+    @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    val requestHeaders: JsonNode,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
