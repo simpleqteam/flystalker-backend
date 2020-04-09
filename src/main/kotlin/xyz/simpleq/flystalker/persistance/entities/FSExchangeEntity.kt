@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
-import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -16,34 +15,34 @@ import javax.persistence.Id
 @Entity
 @TypeDef(name = "jsonb", typeClass = JsonNodeBinaryType::class)
 data class FSExchangeEntity(
-    @Id
-    val id: UUID = UUID.randomUUID(),
+        @Id
+        val id: UUID = UUID.randomUUID(),
 
-    val creationDateTime: OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC),
+        val creationDateTime: OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC),
 
-    val method: HttpMethod,
+        val method: HttpMethod,
 
-    val hostAndPath: String,
+        val hostAndPath: String,
 
-    val responseBody: String,
+        val responseBody: String,
 
-    val requestBody: String,
+        val requestBody: String,
 
-    val responseStatusCode: Int,
+        val responseStatusCode: Int?,
 
-    @Type(type = "jsonb")
+        @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val responseHeaders: JsonNode,
+        val responseHeaders: JsonNode,
 
-    @Type(type = "jsonb")
+        @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val requestHeaders: JsonNode,
+        val requestHeaders: JsonNode,
 
-    @Type(type = "jsonb")
+        @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val queryParams: JsonNode,
+        val queryParams: JsonNode,
 
-    val sendAfterDateTime: OffsetDateTime
+        val sendAfterDateTime: OffsetDateTime
 ) {
     enum class HttpMethod {
         GET, POST, PUT, DELETE, HEAD, OPTIONS;

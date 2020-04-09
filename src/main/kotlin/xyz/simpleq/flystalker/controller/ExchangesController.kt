@@ -21,8 +21,8 @@ class ExchangesController(
             .create(exchangeCreationDto)
 
     @CrossOrigin
-    @GetMapping
-    fun getRequestInfo(@RequestParam uuid: UUID) =
+    @GetMapping("/exchanges/{id}")
+    fun getRequestInfo(@PathVariable id: UUID) =
             exchangesStateManager
-                    .getRequestInfo(uuid)
+                    .getRequestInfo(id)
 }

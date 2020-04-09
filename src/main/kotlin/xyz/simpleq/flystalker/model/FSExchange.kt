@@ -23,6 +23,6 @@ data class RequestSpec(
 data class ResponseSpec(
         val creationDateTime: OffsetDateTime,
         val headers: Map<String, String>,
-        val statusCode: Int,
+        val statusCode: Int?,
         val body: String
 )

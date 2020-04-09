@@ -16,13 +16,13 @@ class FSExchangeModelEntityConverterImpl(
         FSExchangeEntity(
             method = FSExchangeEntity.HttpMethod.from(exchangeCreationDto.method),
             hostAndPath = exchangeCreationDto.hostAndPath,
-            responseHeaders = objectMapper.valueToTree(exchangeCreationDto.responseHeaders),
-            requestHeaders = objectMapper.valueToTree(exchangeCreationDto.requestHeaders),
+            requestHeaders = objectMapper.valueToTree(exchangeCreationDto.headers),
             queryParams = objectMapper.valueToTree(exchangeCreationDto.queryParams),
             sendAfterDateTime = exchangeCreationDto.sendAfterDateTime,
-            responseBody = exchangeCreationDto.responseBody,
-            requestBody = exchangeCreationDto.requestBody,
-            responseStatusCode = exchangeCreationDto.responseStatusCode
+            requestBody = exchangeCreationDto.body,
+            responseBody = "",
+            responseHeaders = objectMapper.convertValue(mapOf<String, List<String>>()),
+            responseStatusCode = null
         )
 
     override fun toModel(exchangeEntity: FSExchangeEntity): FSExchange =
