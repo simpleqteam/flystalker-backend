@@ -39,7 +39,7 @@ class FSExchangeModelEntityConverterImpl(
             ),
                 if(exchangeEntity.responseHeaders == null
                         || exchangeEntity.responseStatusCode == null
-                        || exchangeEntity.responseBody == null) {
+                ) {
                     null
                 }else{
                     ResponseSpec(
