@@ -20,8 +20,8 @@ class FSExchangeModelEntityConverterImpl(
             queryParams = objectMapper.valueToTree(exchangeCreationDto.queryParams),
             sendAfterDateTime = exchangeCreationDto.sendAfterDateTime,
             requestBody = exchangeCreationDto.body,
-            responseBody = "",
-            responseHeaders = objectMapper.convertValue(mapOf<String, List<String>>()),
+            responseBody = null,
+            responseHeaders = null,
             responseStatusCode = null
         )
 
@@ -37,11 +37,17 @@ class FSExchangeModelEntityConverterImpl(
                 sendAfterDateTime = exchangeEntity.sendAfterDateTime,
                 body = exchangeEntity.requestBody
             ),
-            ResponseSpec(
-                exchangeEntity.creationDateTime,
-                headers = objectMapper.convertValue(exchangeEntity.responseHeaders),
-                statusCode = exchangeEntity.responseStatusCode,
-                body = exchangeEntity.responseBody
-            )
+                if(exchangeEntity.responseHeaders == null
+                        || exchangeEntity.responseStatusCode == null
+                        || exchangeEntity.responseBody == null) {
+                    null
+                }else{
+                    ResponseSpec(
+                            exchangeEntity.creationDateTime,
+                            headers = objectMapper.convertValue(exchangeEntity.responseHeaders),
+                            statusCode = exchangeEntity.responseStatusCode,
+                            body = exchangeEntity.responseBody
+                    )
+                }
         )
 }

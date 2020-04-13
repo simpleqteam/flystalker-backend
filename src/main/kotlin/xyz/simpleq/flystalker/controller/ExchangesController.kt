@@ -22,7 +22,7 @@ class ExchangesController(
 
     @CrossOrigin
     @GetMapping("/exchanges/{id}")
-    fun getRequestInfo(@PathVariable id: UUID) =
+    fun getExchangeInfo(@PathVariable id: UUID) =
             exchangesStateManager
                     .getRequestInfo(id)
 }

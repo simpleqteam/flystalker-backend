@@ -15,34 +15,34 @@ import javax.persistence.Id
 @Entity
 @TypeDef(name = "jsonb", typeClass = JsonNodeBinaryType::class)
 data class FSExchangeEntity(
-        @Id
-        val id: UUID = UUID.randomUUID(),
+    @Id
+    val id: UUID = UUID.randomUUID(),
 
-        val creationDateTime: OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC),
+    val creationDateTime: OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC),
 
-        val method: HttpMethod,
+    val method: HttpMethod,
 
-        val hostAndPath: String,
+    val hostAndPath: String,
 
-        val responseBody: String,
+    val responseBody: String?,
 
-        val requestBody: String,
+    val requestBody: String?,
 
-        val responseStatusCode: Int?,
-
-        @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-        val responseHeaders: JsonNode,
+    val responseStatusCode: Int?,
 
         @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-        val requestHeaders: JsonNode,
+    val responseHeaders: JsonNode?,
 
         @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-        val queryParams: JsonNode,
+    val requestHeaders: JsonNode,
 
-        val sendAfterDateTime: OffsetDateTime
+        @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    val queryParams: JsonNode,
+
+    val sendAfterDateTime: OffsetDateTime
 ) {
     enum class HttpMethod {
         GET, POST, PUT, DELETE, HEAD, OPTIONS;
