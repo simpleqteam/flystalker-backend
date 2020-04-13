@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode
 import com.vladmihalcea.hibernate.type.json.JsonNodeBinaryType
 import org.hibernate.annotations.Type
 import org.hibernate.annotations.TypeDef
-import java.time.Duration
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 import java.util.*
@@ -25,11 +24,21 @@ data class FSExchangeEntity(
 
     val hostAndPath: String,
 
-    @Type(type = "jsonb")
-    @Column(columnDefinition = "jsonb")
-    val headers: JsonNode,
+    val responseBody: String?,
 
-    @Type(type = "jsonb")
+    val requestBody: String?,
+
+    val responseStatusCode: Int?,
+
+        @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    val responseHeaders: JsonNode?,
+
+        @Type(type = "jsonb")
+    @Column(columnDefinition = "jsonb")
+    val requestHeaders: JsonNode,
+
+        @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     val queryParams: JsonNode,
 

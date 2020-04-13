@@ -59,13 +59,13 @@ class FSHttpClientImplTests {
 
         val responseMono = fsHttpClient
             .sendHttpRequest(RequestSpec(
-                uuid = UUID.randomUUID(),
                 creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                 method = HttpMethod.GET,
                 hostAndPath = requestUriString,
                 headers = requestHeaders,
                 queryParams = requestQueryParams,
-                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC)
+                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC),
+                body = ""
             ))
 
         StepVerifier
@@ -93,13 +93,13 @@ class FSHttpClientImplTests {
     fun `adds correct extra request headers`() {
         val responseMono = fsHttpClient
             .sendHttpRequest(RequestSpec(
-                uuid = UUID.randomUUID(),
                 creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                 method = HttpMethod.GET,
                 hostAndPath = mockWebServerProperties.url,
                 headers = emptyMap(),
                 queryParams = emptyMap(),
-                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC)
+                sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC),
+                body = ""
             ))
 
         StepVerifier
@@ -131,13 +131,13 @@ class FSHttpClientImplTests {
             .withVirtualTime {
                 fsHttpClient
                     .sendHttpRequest(RequestSpec(
-                        uuid = UUID.randomUUID(),
                         creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
                         method = HttpMethod.GET,
                         hostAndPath = mockWebServerProperties.url,
                         headers = emptyMap(),
                         queryParams = emptyMap(),
-                        sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC).plusNanos(delayDuration.toNanos())
+                        sendAfterDateTime = OffsetDateTime.now(ZoneOffset.UTC).plusNanos(delayDuration.toNanos()),
+                        body = ""
                     ))
             }
             .expectSubscription()
