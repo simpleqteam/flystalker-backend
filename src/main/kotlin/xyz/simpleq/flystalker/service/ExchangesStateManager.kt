@@ -10,4 +10,5 @@ interface ExchangesStateManager {
     fun create(exchangeCreationDto: FSExchangeCreationDto): Mono<FSExchange>
     fun getAll(): Flux<FSExchange>
     fun getRequestInfo(uuid: UUID): Mono<FSExchange>
+    fun getPageByPageInfo(skip: Int, take: Int): Flux<FSExchange>
 }

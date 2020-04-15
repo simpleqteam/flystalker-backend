@@ -25,4 +25,10 @@ class ExchangesController(
     fun getExchangeInfo(@PathVariable id: UUID) =
             exchangesStateManager
                     .getRequestInfo(id)
+
+    @CrossOrigin
+    @GetMapping("/pagination/{skip}/{take}")
+    fun getPageByPageInfo(@PathVariable skip: Int, @PathVariable take: Int) =
+            exchangesStateManager
+                    .getPageByPageInfo(skip, take)
 }
