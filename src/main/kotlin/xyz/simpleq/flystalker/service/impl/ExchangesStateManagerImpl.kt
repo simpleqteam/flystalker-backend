@@ -56,6 +56,7 @@ class ExchangesStateManagerImpl(
 private fun validateLowerThresholdNumber(number: Int, threshold:Int, explanation: String): Mono<Void> = when {
     number < threshold -> Mono.error(IllegalArgumentException(explanation))
     else -> Mono.empty()
+
 }
 
 private fun FSExchangeCreationDto.toEntity(exchangeModelEntityConverter: FSExchangeModelEntityConverter) =

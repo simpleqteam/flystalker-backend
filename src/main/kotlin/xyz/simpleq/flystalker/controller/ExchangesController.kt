@@ -31,4 +31,5 @@ class ExchangesController(
     fun find(@RequestParam pageNumber: Int, @RequestParam pageSize: Int) =
             exchangesStateManager
                     .find(pageNumber, pageSize)
+
 }
