@@ -1,5 +1,7 @@
 package xyz.simpleq.flystalker.service.impl
 
+import org.springframework.data.domain.PageRequest
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
@@ -12,6 +14,7 @@ import xyz.simpleq.flystalker.service.ExchangesStateManager
 import java.util.*
 
 @Service
+
 class ExchangesStateManagerImpl(
     private val exchangesRepository: ExchangesRepository,
     private val exchangeModelEntityConverter: FSExchangeModelEntityConverter
@@ -34,6 +37,25 @@ class ExchangesStateManagerImpl(
                 Mono.just(exchangesRepository.findById(uuid))
             }
             .map { exchangeModelEntityConverter.toModel(it.get()) }
+
+    override fun find(pageNumber: Int, pageSize: Int): Flux<FSExchange> {
+        return validateLowerThresholdNumber(pageNumber, 0,
+                "Error: argument pageNumber must be greater than 0 ").thenMany(
+                    validateLowerThresholdNumber(pageSize, 1,
+                    "Error: argument pageSize must be greater than 1 ").thenMany(
+                        Flux.fromIterable(exchangesRepository
+                                .findAll(PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime")))
+                                .content)
+                            .map { it.toModel(exchangeModelEntityConverter) }
+                    )
+        )
+    }
+
+}
+
+private fun validateLowerThresholdNumber(number: Int, threshold:Int, explanation: String): Mono<Void> = when {
+    number < threshold -> Mono.error(IllegalArgumentException(explanation))
+    else -> Mono.empty()
 
 }
 
