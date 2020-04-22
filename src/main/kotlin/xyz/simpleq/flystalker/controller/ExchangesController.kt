@@ -1,14 +1,17 @@
 package xyz.simpleq.flystalker.controller
 
 import org.springframework.web.bind.annotation.*
+import xyz.simpleq.flystalker.model.RequestSpec
 import xyz.simpleq.flystalker.model.dto.FSExchangeCreationDto
 import xyz.simpleq.flystalker.service.ExchangesStateManager
+import xyz.simpleq.flystalker.service.FSHttpClient
 import java.util.*
 
 @RestController
 @RequestMapping("exchanges")
 class ExchangesController(
-    private val exchangesStateManager: ExchangesStateManager
+        private val exchangesStateManager: ExchangesStateManager,
+        private val fsHttpClient: FSHttpClient
 ) {
     @CrossOrigin
     @GetMapping
@@ -19,8 +22,10 @@ class ExchangesController(
     @CrossOrigin
     @PostMapping
     fun create(@RequestBody exchangeCreationDto: FSExchangeCreationDto) =
-        exchangesStateManager
-            .create(exchangeCreationDto)
+            exchangesStateManager
+                    .create(exchangeCreationDto)
+                    .doOnSuccess { fsHttpClient.sendHttpRequest(it.requestSpec) }
+
 
     @CrossOrigin
     @GetMapping("/exchanges/{id}")
