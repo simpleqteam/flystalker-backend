@@ -1,14 +1,16 @@
 package xyz.simpleq.flystalker.model.dto
 
 import org.springframework.http.HttpMethod
+import xyz.simpleq.flystalker.model.Header
+import xyz.simpleq.flystalker.model.QueryParam
 import java.time.OffsetDateTime
 import java.time.ZoneOffset
 
 data class FSExchangeCreationDto(
     val method: HttpMethod,
     val hostAndPath: String,
-    val body:String,
-    val headers: Map<String, String> = emptyMap(),
-    val queryParams: Map<String, List<String>> = mapOf(),
+    val headers: List<Header> = emptyList(),
+    val queryParams: List<QueryParam> = emptyList(),
+    val body: String? = null,
     val sendAfterDateTime: OffsetDateTime = OffsetDateTime.now(ZoneOffset.UTC)
 )

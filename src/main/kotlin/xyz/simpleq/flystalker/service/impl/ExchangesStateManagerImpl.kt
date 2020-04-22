@@ -27,26 +27,22 @@ class ExchangesStateManagerImpl(
         }
             .map { exchangeModelEntityConverter.toModel(it) }
 
-    override fun getAll(): Flux<FSExchange> =
-        Flux.defer { Flux.fromIterable(exchangesRepository.findAll()) }
-            .map { it.toModel(exchangeModelEntityConverter) }
-
     override fun getRequestInfo(uuid: UUID): Mono<FSExchange> =
-            Mono.defer{
-                Mono.just(exchangesRepository.findById(uuid))
-            }
+        Mono.defer {
+            Mono.just(exchangesRepository.findById(uuid))
+        }
             .map { exchangeModelEntityConverter.toModel(it.get()) }
 
     override fun find(pageNumber: Int, pageSize: Int): Flux<FSExchange> {
         return validateLowerThresholdNumber(pageNumber, 0,
-                "Error: argument pageNumber must be greater than 0 ").thenMany(
-                    validateLowerThresholdNumber(pageSize, 1,
-                    "Error: argument pageSize must be greater than 1 ").thenMany(
-                        Flux.fromIterable(exchangesRepository
-                                .findAll(PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime")))
-                                .content)
-                            .map { it.toModel(exchangeModelEntityConverter) }
-                    )
+            "Error: argument pageNumber must be greater than 0 ").thenMany(
+            validateLowerThresholdNumber(pageSize, 1,
+                "Error: argument pageSize must be greater than 1 ").thenMany(
+                Flux.fromIterable(exchangesRepository
+                    .findAll(PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime")))
+                    .content)
+                    .map { it.toModel(exchangeModelEntityConverter) }
+            )
         )
     }
 
@@ -57,7 +53,7 @@ class ExchangesStateManagerImpl(
 
 }
 
-private fun validateLowerThresholdNumber(number: Int, threshold:Int, explanation: String): Mono<Void> = when {
+private fun validateLowerThresholdNumber(number: Int, threshold: Int, explanation: String): Mono<Void> = when {
     number < threshold -> Mono.error(IllegalArgumentException(explanation))
     else -> Mono.empty()
 

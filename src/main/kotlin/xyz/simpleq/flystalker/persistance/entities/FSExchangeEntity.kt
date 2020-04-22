@@ -30,15 +30,15 @@ data class FSExchangeEntity(
 
     val responseStatusCode: Int?,
 
-        @Type(type = "jsonb")
+    @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     val responseHeaders: JsonNode?,
 
-        @Type(type = "jsonb")
+    @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     val requestHeaders: JsonNode,
 
-        @Type(type = "jsonb")
+    @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     val queryParams: JsonNode,
 
