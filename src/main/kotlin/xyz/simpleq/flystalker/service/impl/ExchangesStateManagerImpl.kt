@@ -51,6 +51,11 @@ class ExchangesStateManagerImpl(
         )
     }
 
+    override fun getSum(): Mono<Long> =
+            Mono.defer{
+                Mono.just(exchangesRepository.count())
+            }
+
 }
 
 private fun validateLowerThresholdNumber(number: Int, threshold:Int, explanation: String): Mono<Void> = when {

@@ -32,4 +32,10 @@ class ExchangesController(
             exchangesStateManager
                     .find(pageNumber, pageSize)
 
+    @CrossOrigin
+    @GetMapping("/sum")
+    fun getSum() =
+            exchangesStateManager
+                    .getSum()
+
 }

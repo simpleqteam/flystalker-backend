@@ -11,4 +11,5 @@ interface ExchangesStateManager {
     fun getAll(): Flux<FSExchange>
     fun getRequestInfo(uuid: UUID): Mono<FSExchange>
     fun find(skip: Int, take: Int): Flux<FSExchange>
+    fun getSum(): Mono<Long>
 }
