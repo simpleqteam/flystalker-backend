@@ -12,7 +12,9 @@ class ExchangesController(
 ) {
     @CrossOrigin
     @GetMapping
-    fun getAll() = exchangesStateManager.getAll()
+    fun find(@RequestParam pageNumber: Int, @RequestParam pageSize: Int) =
+        exchangesStateManager
+            .find(pageNumber, pageSize)
 
     @CrossOrigin
     @PostMapping
@@ -37,5 +39,4 @@ class ExchangesController(
     fun countExchanges() =
         exchangesStateManager
             .countExchanges()
-
 }
