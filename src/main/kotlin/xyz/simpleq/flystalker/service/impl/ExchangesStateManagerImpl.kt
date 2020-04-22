@@ -14,7 +14,6 @@ import xyz.simpleq.flystalker.service.ExchangesStateManager
 import java.util.*
 
 @Service
-
 class ExchangesStateManagerImpl(
     private val exchangesRepository: ExchangesRepository,
     private val exchangeModelEntityConverter: FSExchangeModelEntityConverter
@@ -50,6 +49,11 @@ class ExchangesStateManagerImpl(
                     )
         )
     }
+
+    override fun countExchanges(): Mono<Long> =
+        Mono.defer {
+            Mono.just(exchangesRepository.count())
+        }
 
 }
 
