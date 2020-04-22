@@ -33,9 +33,9 @@ class ExchangesController(
                     .find(pageNumber, pageSize)
 
     @CrossOrigin
-    @GetMapping("/sum")
-    fun getSum() =
-            exchangesStateManager
-                    .getSum()
+    @GetMapping("/quantity")
+    fun countExchanges() =
+        exchangesStateManager
+            .countExchanges()
 
 }
