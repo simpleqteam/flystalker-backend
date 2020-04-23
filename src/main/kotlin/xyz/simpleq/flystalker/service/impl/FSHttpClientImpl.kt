@@ -4,9 +4,8 @@ import org.springframework.stereotype.Service
 import org.springframework.web.reactive.function.client.ClientResponse
 import org.springframework.web.reactive.function.client.WebClient
 import reactor.core.publisher.Mono
-import xyz.simpleq.flystalker.service.FSHttpClient
-import xyz.simpleq.flystalker.model.FSExchange
 import xyz.simpleq.flystalker.model.RequestSpec
+import xyz.simpleq.flystalker.service.FSHttpClient
 import java.net.URI
 import java.time.Duration
 import java.time.OffsetDateTime
@@ -28,12 +27,12 @@ class FSHttpClientImpl(
                     .port(uri.port)
                     .path(uri.path)
                     .apply {
-                        requestSpec.queryParams.forEach { queryParam(it.key, it.value) }
+                        requestSpec.queryParams.forEach { queryParam(it.name, it.values) }
                     }
                     .build()
             }
             .headers { headers ->
-                requestSpec.headers.forEach { headers[it.key] = it.value }
+                requestSpec.headers.forEach { headers[it.name] = it.value }
             }
             .exchange()
             .delaySubscription(Duration.between(OffsetDateTime.now(), requestSpec.sendAfterDateTime))

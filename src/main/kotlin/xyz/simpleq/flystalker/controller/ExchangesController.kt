@@ -1,7 +1,6 @@
 package xyz.simpleq.flystalker.controller
 
 import org.springframework.web.bind.annotation.*
-import xyz.simpleq.flystalker.model.RequestSpec
 import xyz.simpleq.flystalker.model.dto.FSExchangeCreationDto
 import xyz.simpleq.flystalker.service.ExchangesStateManager
 import xyz.simpleq.flystalker.service.FSHttpClient
@@ -30,14 +29,8 @@ class ExchangesController(
     @CrossOrigin
     @GetMapping("/exchanges/{id}")
     fun getExchangeInfo(@PathVariable id: UUID) =
-            exchangesStateManager
-                    .getRequestInfo(id)
-
-    @CrossOrigin
-    @GetMapping("/search")
-    fun find(@RequestParam pageNumber: Int, @RequestParam pageSize: Int) =
-            exchangesStateManager
-                    .find(pageNumber, pageSize)
+        exchangesStateManager
+            .getRequestInfo(id)
 
     @CrossOrigin
     @GetMapping("/quantity")
