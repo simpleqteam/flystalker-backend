@@ -1,16 +1,24 @@
 package xyz.simpleq.flystalker.service.impl
 
+import kotlinx.coroutines.reactive.awaitLast
 import org.springframework.data.domain.PageRequest
 import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
+import org.springframework.web.reactive.function.BodyExtractors
+import org.springframework.web.reactive.function.client.ClientResponse
+import org.springframework.web.reactive.function.client.bodyToMono
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import xyz.simpleq.flystalker.model.FSExchange
+import xyz.simpleq.flystalker.model.Header
+import xyz.simpleq.flystalker.model.ResponseSpec
 import xyz.simpleq.flystalker.model.dto.FSExchangeCreationDto
 import xyz.simpleq.flystalker.persistance.entities.FSExchangeEntity
 import xyz.simpleq.flystalker.persistance.repositories.ExchangesRepository
 import xyz.simpleq.flystalker.service.FSExchangeModelEntityConverter
 import xyz.simpleq.flystalker.service.ExchangesStateManager
+import java.time.OffsetDateTime
+import java.time.ZoneOffset
 import java.util.*
 
 @Service
@@ -51,6 +59,20 @@ class ExchangesStateManagerImpl(
             Mono.just(exchangesRepository.count())
         }
 
+    override fun saveResponseDescription(fsExchange: FSExchange, response: ClientResponse) =
+        response.bodyToMono<String>()
+            .map { body ->
+                val responseSpec = ResponseSpec(
+                    creationDateTime = OffsetDateTime.now(ZoneOffset.UTC),
+                    statusCode = response.rawStatusCode(),
+                    headers = response.headers().asHttpHeaders()
+                        .map { Header(it.key, it.value.first()) },
+                    body = body
+                )
+                fsExchange.responseDescription = responseSpec
+                exchangesRepository.save(fsExchange.toEntity(exchangeModelEntityConverter))
+            }
+            .then()
 }
 
 private fun validateLowerThresholdNumber(number: Int, threshold: Int, explanation: String): Mono<Void> = when {
@@ -61,6 +83,9 @@ private fun validateLowerThresholdNumber(number: Int, threshold: Int, explanatio
 
 private fun FSExchangeCreationDto.toEntity(exchangeModelEntityConverter: FSExchangeModelEntityConverter) =
     exchangeModelEntityConverter.toEntity(this)
+
+private fun FSExchange.toEntity(exchageModelEntityConverter: FSExchangeModelEntityConverter) =
+    exchageModelEntityConverter.toEntity(this)
 
 private fun FSExchangeEntity.toModel(exchangeModelEntityConverter: FSExchangeModelEntityConverter) =
     exchangeModelEntityConverter.toModel(this)

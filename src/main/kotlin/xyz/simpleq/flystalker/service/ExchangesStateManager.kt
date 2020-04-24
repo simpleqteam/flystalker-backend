@@ -1,5 +1,6 @@
 package xyz.simpleq.flystalker.service
 
+import org.springframework.web.reactive.function.client.ClientResponse
 import reactor.core.publisher.Flux
 import reactor.core.publisher.Mono
 import xyz.simpleq.flystalker.model.FSExchange
@@ -11,4 +12,5 @@ interface ExchangesStateManager {
     fun getRequestInfo(uuid: UUID): Mono<FSExchange>
     fun find(pageNumber: Int, pageSize: Int): Flux<FSExchange>
     fun countExchanges(): Mono<Long>
+    fun saveResponseDescription(fsExchange: FSExchange, response: ClientResponse): Mono<Void>
 }

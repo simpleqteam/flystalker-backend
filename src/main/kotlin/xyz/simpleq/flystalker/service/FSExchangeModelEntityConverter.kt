@@ -6,5 +6,6 @@ import xyz.simpleq.flystalker.persistance.entities.FSExchangeEntity
 
 interface FSExchangeModelEntityConverter {
     fun toEntity(exchangeCreationDto: FSExchangeCreationDto): FSExchangeEntity
+    fun toEntity(exchange: FSExchange): FSExchangeEntity
     fun toModel(exchangeEntity: FSExchangeEntity): FSExchange
 }

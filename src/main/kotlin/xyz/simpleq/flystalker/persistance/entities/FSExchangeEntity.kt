@@ -24,23 +24,23 @@ data class FSExchangeEntity(
 
     val hostAndPath: String,
 
-    val responseBody: String?,
-
-    val requestBody: String?,
-
-    val responseStatusCode: Int?,
-
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val responseHeaders: JsonNode?,
+    val queryParams: JsonNode,
 
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
     val requestHeaders: JsonNode,
 
+    val requestBody: String?,
+
+    var responseBody: String?,
+
+    var responseStatusCode: Int?,
+
     @Type(type = "jsonb")
     @Column(columnDefinition = "jsonb")
-    val queryParams: JsonNode,
+    var responseHeaders: JsonNode?,
 
     val sendAfterDateTime: OffsetDateTime
 ) {

@@ -9,8 +9,8 @@ import java.util.*
 @RestController
 @RequestMapping("exchanges")
 class ExchangesController(
-        private val exchangesStateManager: ExchangesStateManager,
-        private val fsHttpClient: FSHttpClient
+    private val exchangesStateManager: ExchangesStateManager,
+    private val fsHttpClient: FSHttpClient
 ) {
     @CrossOrigin
     @GetMapping
@@ -21,9 +21,16 @@ class ExchangesController(
     @CrossOrigin
     @PostMapping
     fun create(@RequestBody exchangeCreationDto: FSExchangeCreationDto) =
-            exchangesStateManager
-                    .create(exchangeCreationDto)
-                    .doOnSuccess { fsHttpClient.sendHttpRequest(it.requestSpec) }
+        exchangesStateManager
+            .create(exchangeCreationDto)
+            .doOnSuccess { fsExchange ->
+                fsHttpClient
+                    .sendHttpRequest(fsExchange.requestSpec)
+                    .flatMap { response ->
+                        exchangesStateManager.saveResponseDescription(fsExchange, response)
+                    }
+                    .subscribe()
+            }
 
 
     @CrossOrigin
