@@ -25,8 +25,23 @@ class FSExchangeModelEntityConverterImpl(
             responseStatusCode = null
         )
 
-    override fun toModel(exchangeEntity: FSExchangeEntity): FSExchange =
-        FSExchange(
+    override fun toEntity(exchange: FSExchange): FSExchangeEntity =
+        FSExchangeEntity(
+            method = FSExchangeEntity.HttpMethod.from(exchange.requestSpec.method),
+            hostAndPath = exchange.requestSpec.hostAndPath,
+            requestHeaders = objectMapper.valueToTree(exchange.requestSpec.headers),
+            queryParams = objectMapper.valueToTree(exchange.requestSpec.queryParams),
+            requestBody = exchange.requestSpec.body,
+            sendAfterDateTime = exchange.requestSpec.sendAfterDateTime,
+            responseBody = exchange.responseDescription?.body,
+            responseHeaders = objectMapper.valueToTree(exchange.responseDescription?.headers),
+            responseStatusCode = exchange.responseDescription?.statusCode
+        )
+
+    override fun toModel(exchangeEntity: FSExchangeEntity): FSExchange {
+        val responseHeaders = exchangeEntity.responseHeaders
+        val statusCode = exchangeEntity.responseStatusCode
+        return FSExchange(
             exchangeEntity.id,
             RequestSpec(
                 exchangeEntity.creationDateTime,
@@ -37,17 +52,16 @@ class FSExchangeModelEntityConverterImpl(
                 sendAfterDateTime = exchangeEntity.sendAfterDateTime,
                 body = exchangeEntity.requestBody
             ),
-                if(exchangeEntity.responseHeaders == null
-                        || exchangeEntity.responseStatusCode == null
-                ) {
-                    null
-                }else{
-                    ResponseSpec(
-                            exchangeEntity.creationDateTime,
-                            headers = objectMapper.convertValue(exchangeEntity.responseHeaders),
-                            statusCode = exchangeEntity.responseStatusCode,
-                            body = exchangeEntity.responseBody
-                    )
-                }
+            if (responseHeaders == null || statusCode == null) {
+                null
+            } else {
+                ResponseSpec(
+                    exchangeEntity.creationDateTime,
+                    headers = objectMapper.convertValue(responseHeaders),
+                    statusCode = statusCode,
+                    body = exchangeEntity.responseBody
+                )
+            }
         )
+    }
 }

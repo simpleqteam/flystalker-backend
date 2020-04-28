@@ -7,7 +7,7 @@ import java.util.*
 data class FSExchange(
     val uuid: UUID,
     val requestSpec: RequestSpec,
-    val responseDescription: ResponseSpec?
+    var responseDescription: ResponseSpec?
 )
 
 data class RequestSpec(
