@@ -33,18 +33,18 @@ class ExchangesStateManagerImpl(
         }
             .map { exchangeModelEntityConverter.toModel(it.get()) }
 
-    override fun find(pageNumber: Int, pageSize: Int): Flux<FSExchange> {
-        return validateLowerThresholdNumber(pageNumber, 0,
-            "Error: argument pageNumber must be greater than 0 ").thenMany(
-            validateLowerThresholdNumber(pageSize, 1,
-                "Error: argument pageSize must be greater than 1 ").thenMany(
-                Flux.fromIterable(exchangesRepository
-                    .findAll(PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime")))
-                    .content)
+    override fun find(pageNumber: Int, pageSize: Int): Flux<FSExchange> =
+        validateLowerThresholdNumber(pageNumber, 0, "Error: argument pageNumber must be greater than 0 ")
+            .then(validateLowerThresholdNumber(pageSize, 1, "Error: argument pageSize must be greater than 1 "))
+            .thenMany(
+                Flux.fromIterable(
+                    exchangesRepository
+                        .findAll(
+                            PageRequest.of(pageNumber, pageSize, Sort.by("creationDateTime").descending())
+                        ).content
+                )
                     .map { it.toModel(exchangeModelEntityConverter) }
             )
-        )
-    }
 
     override fun countExchanges(): Mono<Long> =
         Mono.defer {
